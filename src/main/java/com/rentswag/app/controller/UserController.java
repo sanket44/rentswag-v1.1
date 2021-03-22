@@ -78,7 +78,9 @@ public class UserController {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final String token = jwtTokenUtil.generateToken(authentication);
-            return ResponseEntity.ok(new AuthToken(token));		
+		final int role=u1.getRoles().size();
+            return ResponseEntity.ok(new AuthToken(token, role));	
+//             return ResponseEntity.ok(new AuthToken(token));		
     	}
         
     	return new ResponseEntity<>("Not Verified Verify your email", HttpStatus.UNAUTHORIZED);
