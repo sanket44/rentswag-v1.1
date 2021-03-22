@@ -76,6 +76,7 @@ public class UserController {
                             loginUser.getPassword()
                     )
             );
+		User u1=userdao.findByUsername(loginUser.getUsername());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final String token = jwtTokenUtil.generateToken(authentication);
 		final int role=u1.getRoles().size();
