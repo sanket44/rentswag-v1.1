@@ -66,9 +66,7 @@ public class UserController {
     	if(usr == null) {
     		return new ResponseEntity<>("Invalid username", HttpStatus.FORBIDDEN);
     	}
-//    	if(usr.getPassword().equals(loginUser.getPassword())) {
-//    		return new ResponseEntity<>("Invalid password", HttpStatus.NOT_FOUND);
-//    	}
+
     	if(usr.isEnabled()) {
     		final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -76,12 +74,11 @@ public class UserController {
                             loginUser.getPassword()
                     )
             );
-		User u1=userdao.findByUsername(loginUser.getUsername());
+		
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final String token = jwtTokenUtil.generateToken(authentication);
-		final int role=u1.getRoles().toArray().length;
-            return ResponseEntity.ok(new AuthToken(token, role));	
-//             return ResponseEntity.ok(new AuthToken(token));		
+		final int role=usr.getRoles().toArray().length;
+            return ResponseEntity.ok(new AuthToken(token, role, usr));	
     	}
         
     	return new ResponseEntity<>("Not Verified Verify your email", HttpStatus.UNAUTHORIZED);
