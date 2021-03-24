@@ -153,7 +153,7 @@ public class UserController {
     	return new ResponseEntity<>("Registered Sucessfully", HttpStatus.OK);
     }
     
-	    @RequestMapping(value="/updateDetails", method = RequestMethod.GET)
+	    @PostMapping("/updateDetails") 
 	    public User updateuserinfo(@RequestBody UserDto usr ){
 	       	User nUser=userdao.findById(usr.getId());
 	    	 nUser.setPhone(usr.getPhone());
