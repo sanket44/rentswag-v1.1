@@ -12,6 +12,7 @@ public interface OrderDao extends JpaRepository<Order,Integer>{
 	Order findOrderByid(String id);
 	@Override
 	List<Order> findAll();
+	Order findById(int id);
 //	@Override
 //	default <S extends Order> List<S> saveAll(Iterable<S> entities) {
 //		
