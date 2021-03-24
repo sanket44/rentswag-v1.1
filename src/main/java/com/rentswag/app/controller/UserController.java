@@ -31,6 +31,7 @@ import com.rentswag.app.dao.UserDao;
 import com.rentswag.app.model.AuthToken;
 import com.rentswag.app.model.LoginUser;
 import com.rentswag.app.model.Order;
+import com.rentswag.app.dao.OrderDao;
 import com.rentswag.app.model.Product;
 import com.rentswag.app.model.User;
 import com.rentswag.app.model.UserDto;
