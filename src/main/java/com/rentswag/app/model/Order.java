@@ -25,14 +25,6 @@ public class Order implements Serializable {
     @Column(name = "Order_to", nullable = false)
     private Date orderTo;
  
-//    @Column(name = "Order_Num", nullable = false)
-//    @SequenceGenerator(name="seq", initialValue=1, allocationSize=500)
-//    @GeneratedValue(strategy = GenerationType.Au )
-//    private int orderNum;
- 
-//    @Column(name = "Amount", nullable = false)
-//    private double amount;
- 
     @Column(name = "Customer_Name", length = 255, nullable = false)
     private String customerName;
  
@@ -50,6 +42,16 @@ public class Order implements Serializable {
     
     @Column(name = "ProductCode", nullable = false)
     private int productcode;
+    @Column(columnDefinition = "integer default 0 ")
+    private int status; 
+    
+    public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
     public int getQuanity() {
 		return quanity;
@@ -152,7 +154,7 @@ public class Order implements Serializable {
 	}
 
 	public Order(int id, Date orderFrom, Date orderTo, String customerName, String customerAddress,
-			String customerEmail, String customerPhone, int quanity, int productcode) {
+			String customerEmail, String customerPhone, int quanity, int productcode, int status) {
 		super();
 		this.id = id;
 		this.orderFrom = orderFrom;
@@ -163,40 +165,8 @@ public class Order implements Serializable {
 		this.customerPhone = customerPhone;
 		this.quanity = quanity;
 		this.productcode = productcode;
+		this.status = status;
 	}
-
-//	public Order(int id, Date orderFrom, Date orderTo, String customerName,
-//			String customerAddress, String customerEmail, String customerPhone) {
-//		super();
-//		this.id = id;
-//		this.orderFrom = orderFrom;
-//		this.orderTo = orderTo;
-//		//this.orderNum = orderNum;
-//		//this.amount = amount;
-//		this.customerName = customerName;
-//		this.customerAddress = customerAddress;
-//		this.customerEmail = customerEmail;
-//		this.customerPhone = customerPhone;
-//		
-//	}
-
-
-
-//	public Order(int id, Date orderFrom, Date orderTo, int orderNum, double amount, String customerName,
-//			String customerAddress, String customerEmail, String customerPhone, List<User> user) {
-//		super();
-//		this.id = id;
-//		this.orderFrom = orderFrom;
-//		this.orderTo = orderTo;
-//		this.orderNum = orderNum;
-//		this.amount = amount;
-//		this.customerName = customerName;
-//		this.customerAddress = customerAddress;
-//		this.customerEmail = customerEmail;
-//		this.customerPhone = customerPhone;
-//		this.user = user;
-//	}
-
 	
 
 

@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +59,8 @@ public class UserController {
     private OrderServiceImpl orderserviceImpl;
     @Autowired
     private UserDao userdao;
+    @Autowired
+    private BCryptPasswordEncoder bcryptEncoder;
    
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -66,9 +69,7 @@ public class UserController {
     	if(usr == null) {
     		return new ResponseEntity<>("Invalid username", HttpStatus.FORBIDDEN);
     	}
-//    	if(usr.getPassword().equals(loginUser.getPassword())) {
-//    		return new ResponseEntity<>("Invalid password", HttpStatus.NOT_FOUND);
-//    	}
+
     	if(usr.isEnabled()) {
     		final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -76,9 +77,11 @@ public class UserController {
                             loginUser.getPassword()
                     )
             );
+		
             SecurityContextHolder.getContext().setAuthentication(authentication);
             final String token = jwtTokenUtil.generateToken(authentication);
-            return ResponseEntity.ok(new AuthToken(token));		
+		final int role=usr.getRoles().toArray().length;
+            return ResponseEntity.ok(new AuthToken(token, role, usr));	
     	}
         
     	return new ResponseEntity<>("Not Verified Verify your email", HttpStatus.UNAUTHORIZED);
@@ -149,6 +152,18 @@ public class UserController {
     	userserviceimpl.register(user, getSiteURL(request));       
     	return new ResponseEntity<>("Registered Sucessfully", HttpStatus.OK);
     }
+    
+	    @RequestMapping(value="/updateDetails", method = RequestMethod.GET)
+	    public User updateuserinfo(@RequestBody UserDto usr ){
+	       	User nUser=userdao.findById(usr.getId());
+	    	 nUser.setPhone(usr.getPhone());
+	    	 nUser.setAddress(usr.getAddress());
+	    	 String encodedPassword = bcryptEncoder.encode(usr.getPassword());
+	    	 nUser.setPassword(encodedPassword);
+	    	 nUser.setUsername(usr.getUsername());
+			return userdao.save(nUser); 
+	    
+	  }
      
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();

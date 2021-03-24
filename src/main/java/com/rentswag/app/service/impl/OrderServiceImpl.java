@@ -2,13 +2,13 @@ package com.rentswag.app.service.impl;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rentswag.app.dao.OrderDao;
 import com.rentswag.app.model.Order;
-import com.rentswag.app.model.OrderDetailInfo;
-import com.rentswag.app.model.OrderInfo;
+
 import com.rentswag.app.service.OrderService;
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -36,18 +36,6 @@ public class OrderServiceImpl implements OrderService{
 	public Order findOrder(String orderId) {
 		
 		return orderdao.findOrderByid(orderId) ;
-	}
-
-	@Override
-	public OrderInfo getOrderInfo(String orderId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<OrderDetailInfo> listOrderDetailInfos(String orderId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public List<Order> saveAllOrders(Iterable<Order> orderList) {

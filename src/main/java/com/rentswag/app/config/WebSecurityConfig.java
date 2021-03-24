@@ -40,7 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/users/authenticate","/users/allListOfOrder",
                 "/users/getallproduct", "/users/register","/users/verify",
-                "/users/userping","/users/getallorder","/users/fetchbyusername/{username}").permitAll()
+                "/users/userping","/users/getallorder","/users/updateDetails",
+                "/users/fetchbyusername/{username}").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()

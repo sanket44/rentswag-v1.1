@@ -17,6 +17,7 @@ public interface UserDao extends CrudRepository<User, Long> {
 	  //	  List<User> fetchuser(String username);
 	//  User save(User user);
 	  List<User> findAll();
+	  User findById(long id);
 	  @Query("SELECT u FROM User u WHERE u.verificationCode = ?1")
 	    public User findByVerificationCode(String code);
 	
