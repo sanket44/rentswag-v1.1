@@ -60,6 +60,8 @@ public class UserController {
     @Autowired
     private UserDao userdao;
     @Autowired
+    private OrderDao orderdao;
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
    
 
@@ -164,6 +166,13 @@ public class UserController {
 			return userdao.save(nUser); 
 	    
 	  }
+	  @PreAuthorize("hasRole('ADMIN')")
+	    @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.GET)
+	    public Order  orderstatusupdate(@PathVariable int id ,int status){
+	       Order order= orderdao.findById(id);
+	       order.setStatus(status);
+		return orderdao.save(order);
+	    }
      
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
