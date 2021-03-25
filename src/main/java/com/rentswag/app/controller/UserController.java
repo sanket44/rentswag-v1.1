@@ -64,6 +64,8 @@ public class UserController {
     private OrderDao orderdao;
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
+    @Autowired
+    private JavaMailSender mailSender;
    
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -135,6 +137,17 @@ public class UserController {
 		return userdao.findByUsername(username); 
     
   }
+	
+  @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.GET)
+    public Order  orderstatusupdate(@PathVariable int id,@PathVariable int status ){
+       Order order= orderdao.findById(id);
+//    	int stat= orderdao.updatestatus(id, status);
+      System.out.println(order.getCustomerPhone()+order.getId());
+      order.setStatus(status);
+      return orderdao.save(order);
+        
+    }
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value="/fetchallUserAndAdmin", method = RequestMethod.GET)
     public List<User> fetchalluser(){
@@ -186,6 +199,93 @@ public class UserController {
             return "verify_success";
         } else {
             return "verify_fail";
+        }
+    }
+    //###########################################################################
+    @PostMapping("/forgot_password/{emailfromuser}")
+    public String processForgotPassword(HttpServletRequest request,@PathVariable String emailfromuser) {
+    	 String email = emailfromuser;
+    	    String token = RandomString.make(30);
+    	    
+    	    
+    	    try {
+    	    	//useserviceimpl.updateResetPasswordToken(token, email);
+    	    	User user = userdao.findByEmail(email);
+    	    	
+    	        if (user != null) {
+    	        	//userDao.passreset(token, email);
+    	        	System.out.println("in meeeeeeeeeeeeeeeeeeeeeeejijdjfd");
+    	        	user.setResetPasswordToken(token);
+    	        	System.out.println("in meeeeeeeeeeeeeeeeeeeeeeejijdjfd");
+    	        	userdao.save(user);
+    	            System.out.println("in meeeeeeeeeeeeeeeeeeeeeeejijdjfd");
+    	        } else {
+    	            throw new CustomerNotFoundException("Could not find any customer with the email " + email);
+    	        }
+    	        String resetPasswordLink = "Token="+token; //getSiteURL(request) + "/users/reset_password?token=" + token;
+    	        sendEmail(email, resetPasswordLink);
+    	        return "message We have sent a reset password link to your email. Please check.";
+    	         
+    	    } catch (CustomerNotFoundException ex) {
+    	    	return"error"+ ex.getMessage();
+    	    } catch (UnsupportedEncodingException | MessagingException e) {
+    	    	return "error ,Error while sending email";
+    	    }
+    }
+     
+    public void sendEmail(String recipientEmail, String link)
+            throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = mailSender.createMimeMessage();              
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+         
+        helper.setFrom("rentswagco@gmail.com", "RentSwag");
+        helper.setTo(recipientEmail);
+         
+        String subject = "Here's the link to reset your password";
+         
+        String content = "<p>Hello,</p>"
+                + "<p>You have requested to reset your password.</p>"
+                + "<p>Click the link below to change your password:</p>"
+                + link//+ "<p><a href=\"" + link + "\">Change my password</a></p>"
+                + "<br>"
+                + "<p>Ignore this email if you do remember your password, "
+                + "or you have not made the request.</p>";
+         
+        helper.setSubject(subject);
+         
+        helper.setText(content, true);
+         
+        mailSender.send(message);
+    }
+    	
+ 
+    
+    @GetMapping("/reset_password")
+    public String showResetPasswordForm(@Param(value = "token") String token) {
+    	System.out.println("ssssssssssjjsl;cm");
+       User user = userserviceimpl.getByResetPasswordToken(token);       
+         
+        if (user == null) {
+        	System.out.println("gdgfdg");
+            return "Invalid Token";
+        }
+         
+        return "Sucessful";
+    }
+     
+    @PostMapping("/reset_password/{token}/{password}")
+    public String processResetPassword( @PathVariable String token,@PathVariable String password ) {
+
+         
+        User user = userserviceimpl.getByResetPasswordToken(token);
+         
+        if (user == null) {
+        	
+            return "Invalid Token";
+        } else {           
+        	userserviceimpl.updatePassword(user, password);
+             
+           return "You have successfully changed your password.";
         }
     }
     
