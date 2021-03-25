@@ -4,12 +4,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import net.bytebuddy.utility.RandomString;
 
 import com.rentswag.app.config.TokenProvider;
 import com.rentswag.app.dao.UserDao;
@@ -35,6 +38,7 @@ import com.rentswag.app.dao.OrderDao;
 import com.rentswag.app.model.Product;
 import com.rentswag.app.model.User;
 import com.rentswag.app.model.UserDto;
+import com.rentswag.app.service.impl.CustomerNotFoundException;
 import com.rentswag.app.service.impl.OrderServiceImpl;
 import com.rentswag.app.service.impl.ProductServiceImpl;
 import com.rentswag.app.service.impl.UserServiceImpl;
@@ -180,14 +184,7 @@ public class UserController {
 			return userdao.save(nUser); 
 	    
 	  }
-	  @PreAuthorize("hasRole('ADMIN')")
-	    @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.GET)
-	    public Order  orderstatusupdate(@PathVariable int id ,int status){
-	       Order order= orderdao.findById(id);
-	       order.setStatus(status);
-		return orderdao.save(order);
-	    }
-     
+
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
