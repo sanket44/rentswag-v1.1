@@ -52,6 +52,16 @@ public class User {
 
 //	@Column
 //    private String businessTitle;
+	@Column(name = "reset_password_token")
+	    private String resetPasswordToken;
+    
+    public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLES",
