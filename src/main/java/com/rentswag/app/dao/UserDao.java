@@ -16,6 +16,10 @@ public interface UserDao extends CrudRepository<User, Long> {
 
 	  //	  List<User> fetchuser(String username);
 	//  User save(User user);
+	@Query("SELECT u FROM User u WHERE u.email = ?1")
+	    public User findByEmail(String email); 
+	   
+	    public User findByResetPasswordToken(String token);
 	  List<User> findAll();
 	  User findById(long id);
 	  @Query("SELECT u FROM User u WHERE u.verificationCode = ?1")
