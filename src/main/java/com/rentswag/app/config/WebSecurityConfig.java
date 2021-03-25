@@ -38,11 +38,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/users/authenticate","/users/allListOfOrder",
-                "/users/getallproduct","/users/changestatus/{id}/{status}",
-                "/users/updateDetails", "/users/register","/users/verify",
-                "/users/userping","/users/getallorder",
-                "/users/fetchbyusername/{username}").permitAll()
+                .antMatchers("/users/**"
+//                                 "/users/authenticate","/users/allListOfOrder",
+//                                     "/users/getallproduct","/users/changestatus/{id}/{status}",
+//                                     "/users/updateDetails", "/users/register","/users/verify",
+//                                     "/users/userping","/users/getallorder",
+//                                     "/users/fetchbyusername/{username}"
+                            ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
