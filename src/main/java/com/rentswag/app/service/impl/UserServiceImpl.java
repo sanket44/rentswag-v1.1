@@ -169,5 +169,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	    }
 	     
 	}
+	public User getByResetPasswordToken(String token) {
+	        return userDao.findByResetPasswordToken(token);
+	    }
+	     
+	    public void updatePassword(User user, String newPassword) {
+	        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	        String encodedPassword = passwordEncoder.encode(newPassword);
+	        user.setPassword(encodedPassword);
+	         
+	        user.setResetPasswordToken(null);
+	        userDao.save(user);
+	    }
 	
 }
