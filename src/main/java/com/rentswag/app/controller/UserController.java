@@ -145,7 +145,6 @@ public class UserController {
     
   }
 	
-  @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.GET)
     public Order  orderstatusupdate(@PathVariable int id,@PathVariable int status ){
        Order order= orderdao.findById(id);
