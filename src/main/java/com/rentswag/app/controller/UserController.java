@@ -145,7 +145,7 @@ public class UserController {
     
   }
 	
-    @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.GET)
+    @RequestMapping(value="/changestatus/{id}/{status}", method = RequestMethod.POST)
     public Order  orderstatusupdate(@PathVariable int id,@PathVariable int status ){
        Order order= orderdao.findById(id);
 //    	int stat= orderdao.updatestatus(id, status);
