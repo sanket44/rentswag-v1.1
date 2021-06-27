@@ -164,6 +164,7 @@ public class UserController {
     public  ResponseEntity<?>  processRegister(@RequestBody   UserDto user, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
     	User tempuser=userdao.findByUsername(user.getUsername());
+	User tempemail=userdao.findByEmail(user.getEmail());
 	if(tempuser != null && tempemail != null) {
     		if(user.getUsername().equals(tempuser.getUsername()) )
         	{
