@@ -165,7 +165,7 @@ public class UserController {
             throws UnsupportedEncodingException, MessagingException {
     	User tempuser=userdao.findByUsername(user.getUsername());
 	    User tempemail=userdao.findByEmail(user.getEmail());
-    	if(tempuser != null) {
+    	if(tempuser != null && tempemail != null) {
     		if(user.getUsername().equals(tempuser.getUsername()) )
         	{
         		return new ResponseEntity<>("username already used", HttpStatus.UNAUTHORIZED);
