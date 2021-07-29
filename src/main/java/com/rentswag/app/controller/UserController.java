@@ -194,6 +194,7 @@ public class UserController {
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
+	    System.out.println(siteURL);
         return siteURL.replace(request.getServletPath(), "");
     }  
     
