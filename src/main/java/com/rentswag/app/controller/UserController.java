@@ -163,19 +163,15 @@ public class UserController {
     @PostMapping("/register")
     public  ResponseEntity<?>  processRegister(@RequestBody   UserDto user, HttpServletRequest request)
             throws UnsupportedEncodingException, MessagingException {
-    	User tempuser=userdao.findByUsername(user.getUsername());
-	User tempemail=userdao.findByEmail(user.getEmail());
-	if(tempuser != null && tempemail != null) {
-    		if(user.getUsername().equals(tempuser.getUsername()) )
-        	{
-    			System.out.println("oooppp");
-        		return new ResponseEntity<>("username already used", HttpStatus.UNAUTHORIZED);
-        	}
-    		if( user.getEmail().equals(tempemail.getEmail())) {
-    			System.out.println("fgjhgj");
-    			return new ResponseEntity<>("Email already used", HttpStatus.UNAUTHORIZED);
-    		}
-    	}
+    	User tempuser = userdao.findByUsername(user.getUsername());
+		if (tempuser != null) {
+			return new ResponseEntity<>("username already used", HttpStatus.UNAUTHORIZED);
+		} else {
+			User tempemail = userdao.findByEmail(user.getEmail());
+			if (tempemail != null) {
+				return new ResponseEntity<>("Email already used", HttpStatus.UNAUTHORIZED);
+			}
+		}
     	userserviceimpl.register(user, getSiteURL(request));       
     	return new ResponseEntity<>("Registered Sucessfully", HttpStatus.OK);
     }
